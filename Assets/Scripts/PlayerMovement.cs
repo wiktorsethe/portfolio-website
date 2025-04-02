@@ -2,29 +2,36 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 12f;          // Prędkość poruszania się do przodu
-    public float rotationSpeed = 100f; // Prędkość obracania się w lewo i w prawo
+    public float speed = 6f;             // Prędkość poruszania
+    public float rotationSpeed = 100f;   // Prędkość obracania
+    private CharacterController controller;
+
+    void Start()
+    {
+        controller = GetComponent<CharacterController>(); // Pobranie komponentu CharacterController
+    }
 
     void Update()
     {
-        // Sprawdzamy, czy gracz naciska W, aby poruszać się do przodu
-        bool isMovingForward = Input.GetKey(KeyCode.W);
+        Vector3 move = Vector3.zero;
 
-        // Poruszanie się do przodu przy naciśnięciu klawisza W
-        if (isMovingForward)
+        // Poruszanie się do przodu
+        if (Input.GetKey(KeyCode.W))
         {
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            move += transform.forward;
         }
 
-        // Obracanie gracza w lewo i prawo tylko wtedy, gdy porusza się do przodu
-        if (isMovingForward && Input.GetKey(KeyCode.A))
+        // Obracanie gracza
+        if (Input.GetKey(KeyCode.A))
         {
             transform.Rotate(Vector3.up, -rotationSpeed * Time.deltaTime);
         }
-
-        if (isMovingForward && Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
         }
+
+        // Ruch gracza
+        controller.Move(move * speed * Time.deltaTime);
     }
 }
